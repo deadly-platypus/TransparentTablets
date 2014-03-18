@@ -29,7 +29,7 @@ public class Vec3D {
 	
 	public void normalize(){
 		float distance = this.distance();
-		
+				
 		this.x_dir /= distance;
 		this.y_dir /= distance;
 		this.z_dir /= distance;
@@ -50,5 +50,15 @@ public class Vec3D {
 	public Vec3D cross(Vec3D vec) {
 		// TODO: implement this
 		return null;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof Vec3D)) {
+			return false;
+		}
+		
+		Vec3D vec = (Vec3D)obj;
+		return (this.x_dir == vec.x_dir && this.y_dir == vec.y_dir && this.z_dir == vec.z_dir);
 	}
 }

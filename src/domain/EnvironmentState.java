@@ -7,7 +7,9 @@ public class EnvironmentState {
 	protected boolean use_hardware;
 	protected int height, width;
 	
-	public EnvironmentState() throws Exception{
+	private static EnvironmentState instance;
+	
+	private EnvironmentState() throws RuntimeException{
 		this.use_hardware = test_for_hardware();
 		this.horizontal_fov = calculate_hfov();
 		this.height = calculate_height();
@@ -47,12 +49,35 @@ public class EnvironmentState {
 		this.horizontal_fov = horizontal_fov;
 	}
 	
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public static EnvironmentState getInstance() throws RuntimeException {
+		if(instance == null) {
+			instance = new EnvironmentState();
+		}
+		return instance;
+	}
+	
 	/**
 	 * This method is where the Android calls needed to get the hardware camera hfov reside when it's ready
 	 * @return the hardware hfov or 45.0f if use_hardware is false
-	 * @throws Exception if hardware is supposed to be used, but an exception is raised trying to get the hfov
+	 * @throws RuntimeException if hardware is supposed to be used, but an exception is raised trying to get the hfov
 	 */
-	private Float calculate_hfov() throws Exception {
+	private Float calculate_hfov() throws RuntimeException {
 		if(!use_hardware) {
 			return 45.0f;
 		} else {

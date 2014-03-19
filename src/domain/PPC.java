@@ -4,6 +4,7 @@ public class PPC {
 	protected Point3D origin, view_corner;
 	protected Vec3D width, height;
 	protected float focal_length;
+	protected float pixels[];
 	
 	public PPC(float horizontal_fov, int width, int height, Point3D origin) {
 		this.origin = origin;
@@ -11,6 +12,7 @@ public class PPC {
 		this.height = new Vec3D(0.0f, -1.0f, 0.0f);
 		this.focal_length = (float) (width / 2.0f / Math.tan(horizontal_fov / 180.0f * Math.PI / 2.0f));
 		this.view_corner = new Point3D(-(float)width / 2.0f, (float)height / 2.0f, -this.focal_length);
+		this.pixels = new float[EnvironmentState.getInstance().width * EnvironmentState.getInstance().height];
 	}
 
 	public Point3D getOrigin() {
@@ -53,8 +55,12 @@ public class PPC {
 		this.focal_length = focal_length;
 	}
 	
-	public float[] getFrame() {
+	public float[] getPixels() {
 		// TODO: implement this
-		return new float[0];
+		return this.pixels;
+	}
+	
+	public float getPixel(int x, int y) {
+		return this.pixels[EnvironmentState.getInstance().width * y + x];
 	}
 }

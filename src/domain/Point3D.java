@@ -1,37 +1,11 @@
 package domain;
 
-public class Point3D {
-	protected float x, y, z;
-	
+public class Point3D extends Tuple3{
 	public Point3D(float x, float y, float z) {
-		this.x = x;
-		this.y = y;
-		this.z = z;
-	}
-
-	public float getX() {
-		return x;
-	}
-
-	public void setX(float x) {
-		this.x = x;
-	}
-
-	public float getY() {
-		return y;
-	}
-
-	public void setY(float y) {
-		this.y = y;
-	}
-
-	public float getZ() {
-		return z;
-	}
-
-	public void setZ(float z) {
-		this.z = z;
+		super(x, y, z);
 	}
 	
-	
+	public Point3D translate(Vec3D vec) {
+		return new Point3D(this.x + vec.x, this.y + vec.y, this.z + vec.z);
+	}
 }

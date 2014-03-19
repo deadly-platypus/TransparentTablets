@@ -10,6 +10,12 @@ public class Tuple3 {
 		this.y = y;
 		this.z = z;
 	}
+	
+	public Tuple3() {
+		this.x = 0.0f;
+		this.y = 0.0f;
+		this.z = 0.0f;
+	}
 
 	public float getX() {
 		return x;
@@ -50,7 +56,25 @@ public class Tuple3 {
 		return "(" + x + ", " + y + ", " + z + ")";
 	}
 	
-	public Tuple3 rotate(Vec3D axis, float radians) {
+	public Tuple3 add(Tuple3 in) {
+		Tuple3 result = new Tuple3();
+		result.x = this.x + in.x;
+		result.y = this.y + in.y;
+		result.z = this.z + in.z;
+		
+		return result;
+	}
+	
+	public Tuple3 subtract(Tuple3 in) {
+		Tuple3 result = new Tuple3();
+		result.x = this.x - in.x;
+		result.y = this.y - in.y;
+		result.z = this.z - in.z;
+		
+		return result;
+	}
+	
+	public Tuple3 rotate(Vec3 axis, float radians) {
 		if(axis.distance2() != 1.0f) {
 			throw new NonUnitaryException(axis);
 		}

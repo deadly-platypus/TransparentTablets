@@ -1,8 +1,8 @@
 package domain;
 
 public class Wall {
-	protected Point3D corners[];
-	protected Vec3D normal;
+	protected Point3 corners[];
+	protected Vec3 normal;
 	
 	/**
 	 * The points are used for determining the normal, so order matters.
@@ -12,19 +12,19 @@ public class Wall {
 	 * @param bottomLeft
 	 * @param bottomRight
 	 */
-	public Wall(Point3D topLeft, Point3D topRight, Point3D bottomLeft, Point3D bottomRight) {
-		this.corners = new Point3D[4];
+	public Wall(Point3 topLeft, Point3 topRight, Point3 bottomLeft, Point3 bottomRight) {
+		this.corners = new Point3[4];
 		this.corners[0] = topLeft;
 		this.corners[1] = topRight;
 		this.corners[2] = bottomLeft;
 		this.corners[3] = bottomRight;
 		
-		this.normal = new Vec3D(topRight, topLeft).cross(new Vec3D(topRight, bottomRight));
+		this.normal = new Vec3(topRight, topLeft).cross(new Vec3(topRight, bottomRight));
 		this.normal.normalize();
 	}
 	
-	public Wall(Point3D topLeft, Point3D topRight, Point3D bottomLeft, Point3D bottomRight, Vec3D normal){
-		this.corners = new Point3D[4];
+	public Wall(Point3 topLeft, Point3 topRight, Point3 bottomLeft, Point3 bottomRight, Vec3 normal){
+		this.corners = new Point3[4];
 		this.corners[0] = topLeft;
 		this.corners[1] = topRight;
 		this.corners[2] = bottomLeft;
@@ -34,20 +34,24 @@ public class Wall {
 		this.normal.normalize();
 	}
 
-	public Point3D[] getCorners() {
+	public Point3[] getCorners() {
 		return corners;
 	}
 
-	public void setCorners(Point3D[] corners) {
+	public void setCorners(Point3[] corners) {
 		this.corners = corners;
 	}
 
-	public Vec3D getNormal() {
+	public Vec3 getNormal() {
 		return normal;
 	}
 
-	public void setNormal(Vec3D normal) {
+	public void setNormal(Vec3 normal) {
 		this.normal = normal;
 	}
 	
+	public Point3 intersect(Ray3D ray) {
+		// TODO: implement this
+		return null;
+	}
 }

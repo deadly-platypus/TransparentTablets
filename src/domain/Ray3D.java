@@ -1,38 +1,38 @@
 package domain;
 
 public class Ray3D {
-	protected Point3D origin;
-	protected Vec3D direction;
+	protected Point3 origin;
+	protected Vec3 direction;
 	
-	public Ray3D(Point3D origin, Point3D p){
+	public Ray3D(Point3 origin, Point3 p){
 		this.origin = origin;
-		this.direction = new Vec3D(origin, p);
+		this.direction = new Vec3(origin, p);
 		this.direction.normalize();
 	}
 	
-	public Ray3D(Point3D origin, Vec3D direction){
+	public Ray3D(Point3 origin, Vec3 direction){
 		this.origin = origin;
-		this.direction = new Vec3D(direction);
+		this.direction = new Vec3(direction);
 		this.direction.normalize();
 	}
 
-	public Point3D getOrigin() {
+	public Point3 getOrigin() {
 		return origin;
 	}
 
-	public void setOrigin(Point3D origin) {
+	public void setOrigin(Point3 origin) {
 		this.origin = origin;
 	}
 
-	public Vec3D getDirection() {
+	public Vec3 getDirection() {
 		return direction;
 	}
 
-	public void setDirection(Vec3D direction) {
+	public void setDirection(Vec3 direction) {
 		this.direction = direction;
 	}
 	
-	public Point3D intersect(Wall wall) {
+	public Point3 intersect(Wall wall) {
 		// TODO: implement this
 		return null;
 	}

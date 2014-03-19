@@ -1,6 +1,6 @@
 package exceptions;
 
-import domain.Vec3D;
+import domain.Vec3;
 
 public class NonUnitaryException extends RuntimeException {
 	/**
@@ -8,9 +8,9 @@ public class NonUnitaryException extends RuntimeException {
 	 */
 	private static final long serialVersionUID = -6597800056910129901L;
 
-	private Vec3D vec;
+	private Vec3 vec;
 	
-	public NonUnitaryException(Vec3D vec){
+	public NonUnitaryException(Vec3 vec){
 		this.vec = vec;
 	}
 	

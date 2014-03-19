@@ -16,12 +16,12 @@ public class EnvironmentState {
 		this.width = calculate_width();
 		
 		this.previousCamera = null;
-		this.currentCamera = new PPC(this.horizontal_fov, this.width, this.height, new Point3D(0.0f, 0.0f, 1.0f));
+		this.currentCamera = new PPC(this.horizontal_fov, this.width, this.height, new Point3(0.0f, 0.0f, 1.0f));
 		
-		this.wall = new Wall(new Point3D(-100.0f, 100.0f, 0.0f), 
-								new Point3D(100.0f, 100.0f, 0.0f), 
-								new Point3D(-100.0f, -100.0f, 0.0f), 
-								new Point3D(100.0f, -100.0f, 0.0f));
+		this.wall = new Wall(new Point3(-100.0f, 100.0f, 0.0f), 
+								new Point3(100.0f, 100.0f, 0.0f), 
+								new Point3(-100.0f, -100.0f, 0.0f), 
+								new Point3(100.0f, -100.0f, 0.0f));
 	}
 	
 	public PPC getCurrentCamera() {

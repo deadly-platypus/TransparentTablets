@@ -48,8 +48,7 @@ public class Vec3D {
 	}
 	
 	public Vec3D cross(Vec3D vec) {
-		// TODO: implement this
-		return null;
+		return new Vec3D(this.y_dir * vec.z_dir - this.z_dir * vec.y_dir, this.z_dir * vec.x_dir - this.x_dir * vec.z_dir, this.x_dir * vec.y_dir - this.y_dir * vec.x_dir);
 	}
 	
 	@Override
@@ -60,5 +59,10 @@ public class Vec3D {
 		
 		Vec3D vec = (Vec3D)obj;
 		return (this.x_dir == vec.x_dir && this.y_dir == vec.y_dir && this.z_dir == vec.z_dir);
+	}
+	
+	@Override
+	public String toString() {
+		return "(" + x_dir + ", " + y_dir + ", " + z_dir + ")";
 	}
 }

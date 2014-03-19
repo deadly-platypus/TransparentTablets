@@ -19,7 +19,7 @@ public class Wall {
 		this.corners[2] = bottomLeft;
 		this.corners[3] = bottomRight;
 		
-		this.normal = new Vec3D(topRight, topLeft).cross(new Vec3D(bottomRight, topRight));
+		this.normal = new Vec3D(topRight, topLeft).cross(new Vec3D(topRight, bottomRight));
 		this.normal.normalize();
 	}
 	

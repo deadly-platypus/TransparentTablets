@@ -53,4 +53,8 @@ public class PPC {
 		this.focal_length = focal_length;
 	}
 	
+	public float[] getFrame() {
+		// TODO: implement this
+		return new float[0];
+	}
 }

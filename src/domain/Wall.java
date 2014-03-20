@@ -6,7 +6,7 @@ public class Wall {
 	
 	/**
 	 * The points are used for determining the normal, so order matters.
-	 * Normal is (topRight - topLeft) x (bottomRight - topRight)
+	 * Normal is (topRight - topLeft) x (topRight - bottomRight)
 	 * @param topLeft
 	 * @param topRight
 	 * @param bottomLeft

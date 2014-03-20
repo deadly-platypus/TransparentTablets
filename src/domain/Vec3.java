@@ -10,20 +10,16 @@ public class Vec3 extends Tuple3{
 		super(x_dir, y_dir, z_dir);
 	}
 	
+	public Vec3() {
+		super(0.0f, 0.0f, 0.0f);
+	}
+	
 	public Vec3(Vec3 vec){
 		super(vec.x, vec.y, vec.z);
 	}
 	
-	public void multiply(float scale) {
-		this.x *= scale;
-		this.y *= scale;
-		this.z *= scale;
-	}
-	
-	public void divide(float scale) {
-		this.x /= scale;
-		this.y /= scale;
-		this.z /= scale;
+	public Vec3(Tuple3 t3) {
+		super(t3.x, t3.y, t3.z);
 	}
 	
 	public void normalize(){
@@ -34,12 +30,12 @@ public class Vec3 extends Tuple3{
 		this.z /= distance;
 	}
 	
-	public float distance() {
-		return (float) Math.sqrt(x * x + y * y + z * z);
+	public Vec3 multiply(float scale) {
+		return new Vec3(super.multiply(scale));
 	}
 	
-	public float distance2() {
-		return (x * x + y * y + z * z);
+	public Vec3 divide(float scale) {
+		return new Vec3(super.divide(scale));
 	}
 	
 	public float dot(Vec3 vec) {

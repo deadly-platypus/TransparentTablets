@@ -15,12 +15,12 @@ public class CameraDelta {
 	}
 	
 	public static CameraDelta getDifference(PPC currentCamera, PPC previousCamera) {
-		float min_transx 	= Float.MAX_VALUE;
-		float min_transy 	= Float.MAX_VALUE; 
-		float min_transz 	= Float.MAX_VALUE; 
-		float min_rotx 		= Float.MAX_VALUE;
-		float min_roty		= Float.MAX_VALUE; 
-		float min_rotz		= Float.MAX_VALUE;
+		float min_transx 	= 0.0f;
+		float min_transy 	= 0.0f;
+		float min_transz 	= 0.0f;
+		float min_rotx 		= 0.0f;
+		float min_roty		= 0.0f;
+		float min_rotz		= 0.0f;
 		
 		float min_error		= Float.MAX_VALUE;
 		
@@ -52,6 +52,8 @@ public class CameraDelta {
 		return new CameraDelta(min_transx, min_transy, min_transz, min_rotx, min_roty, min_rotz);
 	}
 	
+	
+	
 	private static float error(PPC currentCamera, PPC previousCamera, float min_error, float x_trans, float y_trans, float z_trans, float x_rot, float y_rot, float z_rot) {
 		float error = 0.0f;
 		EnvironmentState state = null;
@@ -63,9 +65,14 @@ public class CameraDelta {
 		}
 		
 		// TODO: This is probably going to be ridic slow, so maybe find some other way
+		Point3 p = new Point3();
+		p.setZ(currentCamera.getView_corner().z);
 		for(int x = 0; x < state.getWidth(); x++) {
 			for(int y = 0; y < state.getHeight(); y++) {
-				error += Math.abs(currentCamera.getPixel(x, y) - previousCamera.getPixel(x, y));
+				p.setX(x);
+				p.setY(y);
+				Point3 p_prime = (Point3) previousCamera.project(p); 
+				error += Math.abs(currentCamera.getPixel(x, y) - previousCamera.getPixel((int)p_prime.x, (int)p_prime.y));
 				if(error > min_error) {
 					break;
 				}

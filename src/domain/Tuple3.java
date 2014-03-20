@@ -4,6 +4,7 @@ import exceptions.NonUnitaryException;
 
 public class Tuple3 {
 	protected float x, y, z;
+	public static final float epsilon = 0.0000005f;
 	
 	public Tuple3(float x, float y, float z) {
 		this.x = x;
@@ -72,6 +73,22 @@ public class Tuple3 {
 		result.z = this.z - in.z;
 		
 		return result;
+	}
+	
+	public Tuple3 multiply(float scale) {
+		return new Tuple3(this.x * scale, this.y * scale, this.z * scale);
+	}
+	
+	public Tuple3 divide(float scale) {
+		return new Tuple3(this.x / scale, this.y / scale, this.z / scale);
+	}
+	
+	public float distance() {
+		return (float) Math.sqrt(x * x + y * y + z * z);
+	}
+	
+	public float distance2() {
+		return (x * x + y * y + z * z);
 	}
 	
 	public Tuple3 rotate(Vec3 axis, float radians) {

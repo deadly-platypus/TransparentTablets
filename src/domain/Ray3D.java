@@ -31,9 +31,4 @@ public class Ray3D {
 	public void setDirection(Vec3 direction) {
 		this.direction = direction;
 	}
-	
-	public Point3 intersect(Wall wall) {
-		// TODO: implement this
-		return null;
-	}
 }

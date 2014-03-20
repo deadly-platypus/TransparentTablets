@@ -12,7 +12,6 @@ public class PPC {
 		this.height = new Vec3(0.0f, -1.0f, 0.0f);
 		this.focal_length = (float) (width / 2.0f / Math.tan(horizontal_fov / 180.0f * Math.PI / 2.0f));
 		this.view_corner = new Point3(-(float)width / 2.0f, (float)height / 2.0f, -this.focal_length);
-		this.pixels = new float[EnvironmentState.getInstance().width * EnvironmentState.getInstance().height];
 	}
 
 	public Point3 getOrigin() {
@@ -87,5 +86,12 @@ public class PPC {
 		result.z = 1.0f / q.z;
 		
 		return result;
+	}
+	
+	public Ray3D project(Ray3D ray) {
+		Point3 origin = (Point3) this.project(ray.getOrigin());
+		Vec3 dir = (Vec3) this.project(ray.getDirection());
+		
+		return new Ray3D(origin, dir);
 	}
 }

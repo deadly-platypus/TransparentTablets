@@ -2,13 +2,19 @@ package graphics;
 
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.glu.GLU;
+
+import domain.EnvironmentState;
 
 public class TTRenderer implements GLEventListener {
+	private EnvironmentState state;
+	private GLU glu;
 
 	@Override
 	public void init(GLAutoDrawable drawable) {
-		// TODO Auto-generated method stub
-
+		this.state = EnvironmentState.getInstance();
+		this.glu = new GLU();
+		
 	}
 
 	@Override
@@ -19,7 +25,7 @@ public class TTRenderer implements GLEventListener {
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
-		// TODO Auto-generated method stub
+		
 
 	}
 

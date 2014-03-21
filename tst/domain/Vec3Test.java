@@ -9,14 +9,14 @@ public class Vec3Test {
 	@Test
 	public void testMultiply() {
 		Vec3 test = new Vec3(1.0f, 1.0f, 1.0f);
-		test.multiply(2.0f);
+		test = test.multiply(2.0f);
 		assertEquals(new Vec3(2.0f, 2.0f, 2.0f), test);
 	}
 
 	@Test
 	public void testDivide() {
 		Vec3 test = new Vec3(2.0f, 2.0f, 2.0f);
-		test.divide(2.0f);
+		test = test.divide(2.0f);
 		
 		assertEquals(new Vec3(1.0f, 1.0f, 1.0f), test);
 	}

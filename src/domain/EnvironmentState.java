@@ -1,11 +1,20 @@
 package domain;
 
+import java.io.IOException;
+
+import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLProfile;
+
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureIO;
+
 public class EnvironmentState {
 	protected PPC currentCamera, previousCamera;
 	protected Wall wall;
 	protected Float horizontal_fov;
 	protected boolean use_hardware;
 	protected int height, width;
+	protected GLCapabilities caps;
 	
 	private static EnvironmentState instance;
 	
@@ -15,6 +24,8 @@ public class EnvironmentState {
 		this.height = calculate_height();
 		this.width = calculate_width();
 		
+		this.caps = new GLCapabilities(GLProfile.getDefault());
+		
 		this.previousCamera = null;
 		this.currentCamera = new PPC(this.horizontal_fov, this.width, this.height, new Point3(0.0f, 0.0f, 1.0f));
 		
@@ -22,6 +33,17 @@ public class EnvironmentState {
 								new Point3(100.0f, 100.0f, 0.0f), 
 								new Point3(-100.0f, -100.0f, 0.0f), 
 								new Point3(100.0f, -100.0f, 0.0f));
+		
+		if(!this.use_hardware) {
+				try {
+					Texture tex = TextureIO.newTexture(
+					           getClass().getClassLoader().getResource("crate.png"), // relative to project root 
+					           false, ".png");
+					this.wall.setTex(tex);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+		}
 	}
 	
 	public PPC getCurrentCamera() {
@@ -63,6 +85,14 @@ public class EnvironmentState {
 
 	public void setWidth(int width) {
 		this.width = width;
+	}
+
+	public GLCapabilities getCaps() {
+		return caps;
+	}
+
+	public void setCaps(GLCapabilities caps) {
+		this.caps = caps;
 	}
 
 	public static EnvironmentState getInstance() throws RuntimeException {

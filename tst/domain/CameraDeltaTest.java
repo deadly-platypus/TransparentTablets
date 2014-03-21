@@ -14,15 +14,14 @@ public class CameraDeltaTest {
 		PPC cam1 = state.getCurrentCamera();
 		cam1.pixels = makeRandomPixels();
 		
-		Vec3 trans = new Vec3(0.1f, 0.0f, 0.0f);
+		Vec3 trans = new Vec3(1.0f, 0.0f, 0.0f);
 		Point3 origin2 = origin1.translate(trans);
 		
 		PPC cam2 = new PPC(state.getHorizontal_fov(), state.getWidth(), state.getHeight(), origin2);
 		float pix2[] = new float[cam1.pixels.length];
 		for(int y = 0; y < state.getHeight(); y++) {
 			for(int x = 0; x < state.getWidth(); x++){
-				Tuple3 t = cam1.project(new Point3(x, y, cam2.getView_corner().z));
-				pix2[state.getWidth() * y + x] = cam1.getPixel((int)t.x, (int)t.y);
+				pix2[state.getWidth() * y + x] = cam1.getPixel((int)x + 1, (int)y);
 			}
 		}
 		cam2.pixels = pix2;

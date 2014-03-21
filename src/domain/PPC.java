@@ -1,8 +1,24 @@
 package domain;
 
 public class PPC {
-	protected Point3 origin, view_corner;
+	/**
+	 * C in the traditional PPC parlance
+	 */
+	protected Point3 origin;
+	
+	/**
+	 * c in the traditional PPC parlance
+	 */
+	protected Vec3 view_corner;
+	
+	/**
+	 * a and b respectively
+	 */
 	protected Vec3 width, height;
+	
+	/**
+	 * f
+	 */
 	protected float focal_length;
 	protected float pixels[];
 	
@@ -10,8 +26,8 @@ public class PPC {
 		this.origin = origin;
 		this.width = new Vec3(1.0f, 0.0f, 0.0f);
 		this.height = new Vec3(0.0f, -1.0f, 0.0f);
-		this.focal_length = (float) (width / 2.0f / Math.tan(horizontal_fov / 180.0f * Math.PI / 2.0f));
-		this.view_corner = new Point3(-(float)width / 2.0f, (float)height / 2.0f, -this.focal_length);
+		this.focal_length = (float) (width / (2.0f * Math.tan(horizontal_fov / 2.0f * (Math.PI / 180.0f))));
+		this.view_corner = new Vec3(-(float)width / 2.0f, (float)height / 2.0f, -this.focal_length);
 	}
 
 	public Point3 getOrigin() {
@@ -22,11 +38,11 @@ public class PPC {
 		this.origin = origin;
 	}
 
-	public Point3 getView_corner() {
+	public Vec3 getView_corner() {
 		return view_corner;
 	}
 
-	public void setView_corner(Point3 view_corner) {
+	public void setView_corner(Vec3 view_corner) {
 		this.view_corner = view_corner;
 	}
 
@@ -74,7 +90,9 @@ public class PPC {
 		mat.setColumn(1, this.height);
 		mat.setColumn(2, this.view_corner);
 		
-		Tuple3 q = mat.inverted().multiply(in.subtract(this.origin));
+		Tuple3 pmc = in.subtract(this.origin);
+		Matrix9 inv = mat.inverted();
+		Tuple3 q = inv.multiply(pmc);
 		
 		if(q.z < 0.0f){
 			return null;

@@ -71,7 +71,7 @@ public class CameraDelta {
 			for(int y = 0; y < state.getHeight(); y++) {
 				p.setX(x);
 				p.setY(y);
-				Point3 p_prime = (Point3) previousCamera.project(p); 
+				Tuple3 p_prime = previousCamera.project(p); 
 				error += Math.abs(currentCamera.getPixel(x, y) - previousCamera.getPixel((int)p_prime.x, (int)p_prime.y));
 				if(error > min_error) {
 					break;

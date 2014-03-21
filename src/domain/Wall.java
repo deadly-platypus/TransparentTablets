@@ -1,8 +1,11 @@
 package domain;
 
+import com.jogamp.opengl.util.texture.Texture;
+
 public class Wall {
 	protected Point3 corners[];
 	protected Vec3 normal;
+	protected Texture tex; // Used for when there is no hardware
 	
 	/**
 	 * The points are used for determining the normal, so order matters.
@@ -50,6 +53,14 @@ public class Wall {
 		this.normal = normal;
 	}
 	
+	public Texture getTex() {
+		return tex;
+	}
+
+	public void setTex(Texture tex) {
+		this.tex = tex;
+	}
+
 	public Point3 intersect(Ray3D ray) {
 		// TODO: implement this
 		return null;

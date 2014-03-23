@@ -1,12 +1,7 @@
 package domain;
 
-import java.io.IOException;
-
 import javax.media.opengl.GLCapabilities;
 import javax.media.opengl.GLProfile;
-
-import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureIO;
 
 public class EnvironmentState {
 	protected PPC currentCamera, previousCamera;
@@ -18,32 +13,27 @@ public class EnvironmentState {
 	
 	private static EnvironmentState instance;
 	
+	public static final float MAX_Z = 10000.0f;
+	public static final float MIN_Z = 0.1f;
+	
 	private EnvironmentState() throws RuntimeException{
-		this.use_hardware = test_for_hardware();
-		this.horizontal_fov = calculate_hfov();
-		this.height = calculate_height();
-		this.width = calculate_width();
-		
+		this.resize();
 		this.caps = new GLCapabilities(GLProfile.getDefault());
 		
 		this.previousCamera = null;
 		this.currentCamera = new PPC(this.horizontal_fov, this.width, this.height, new Point3(0.0f, 0.0f, 1.0f));
 		
-		this.wall = new Wall(new Point3(-100.0f, 100.0f, 0.0f), 
-								new Point3(100.0f, 100.0f, 0.0f), 
-								new Point3(-100.0f, -100.0f, 0.0f), 
-								new Point3(100.0f, -100.0f, 0.0f));
-		
-		if(!this.use_hardware) {
-				try {
-					Texture tex = TextureIO.newTexture(
-					           getClass().getClassLoader().getResource("crate.png"), // relative to project root 
-					           false, ".png");
-					this.wall.setTex(tex);
-				} catch (IOException e) {
-					throw new RuntimeException(e);
-				}
-		}
+		this.wall = new Wall(new Point3(-1000.0f, 1000.0f, 0.0f), 
+								new Point3(1000.0f, 1000.0f, 0.0f), 
+								new Point3(-1000.0f, -1000.0f, 0.0f), 
+								new Point3(1000.0f, -1000.0f, 0.0f));
+	}
+	
+	public void resize() {
+		this.use_hardware = test_for_hardware();
+		this.horizontal_fov = calculate_hfov();
+		this.height = calculate_height();
+		this.width = calculate_width();
 	}
 	
 	public PPC getCurrentCamera() {
@@ -93,6 +83,14 @@ public class EnvironmentState {
 
 	public void setCaps(GLCapabilities caps) {
 		this.caps = caps;
+	}
+
+	public boolean isUse_hardware() {
+		return use_hardware;
+	}
+
+	public void setUse_hardware(boolean use_hardware) {
+		this.use_hardware = use_hardware;
 	}
 
 	public static EnvironmentState getInstance() throws RuntimeException {

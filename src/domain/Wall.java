@@ -65,4 +65,20 @@ public class Wall {
 		// TODO: implement this
 		return null;
 	}
+	
+	public Point3 getTopLeft() {
+		return this.corners[0];
+	}
+	
+	public Point3 getTopRight() {
+		return this.corners[1];
+	}
+	
+	public Point3 getBottomLeft() {
+		return this.corners[2];
+	}
+	
+	public Point3 getBottomRight() {
+		return this.corners[3];
+	}
 }

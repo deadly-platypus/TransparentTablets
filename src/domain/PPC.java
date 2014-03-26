@@ -83,7 +83,7 @@ public class PPC {
 		this.pixels[EnvironmentState.getInstance().width * y + x] = color;
 	}
 	
-	public Tuple3 project(Tuple3 in) {
+	public Tuple3 toCameraCoords(Tuple3 in) {
 		Matrix9 mat = new Matrix9();
 		
 		mat.setColumn(0, this.width);
@@ -96,6 +96,12 @@ public class PPC {
 		
 		if(q.z < 0.0f){
 			return null;
+		} else if(Math.abs(q.z) < Tuple3.epsilon) {
+			if(q.z < 0.0f) {
+				q.z = -Tuple3.epsilon;
+			} else {
+				q.z = Tuple3.epsilon;
+			}
 		}
 		
 		Tuple3 result = new Tuple3();
@@ -106,9 +112,15 @@ public class PPC {
 		return result;
 	}
 	
-	public Ray3D project(Ray3D ray) {
-		Point3 origin = (Point3) this.project(ray.getOrigin());
-		Vec3 dir = (Vec3) this.project(ray.getDirection());
+	public Tuple3 toWorldCoords(Tuple3 in) {
+		
+		Tuple3 result = this.origin.add(this.width.multiply(in.x).add(this.height.multiply(in.y).add(this.view_corner)).multiply(1.0f / in.z));
+		return result;
+	}
+	
+	public Ray3D toCameraCoords(Ray3D ray) {
+		Point3 origin = (Point3) this.toCameraCoords(ray.getOrigin());
+		Vec3 dir = (Vec3) this.toCameraCoords(ray.getDirection());
 		
 		return new Ray3D(origin, dir);
 	}

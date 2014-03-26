@@ -62,7 +62,30 @@ public class Wall {
 	}
 
 	public Point3 intersect(Ray3D ray) {
-		// TODO: implement this
+		float denominator = ray.getDirection().dot(this.normal);
+		// This assumes that the ray is in front of the wall
+		if(denominator >= 0.0f){
+			return null;
+		}
+		
+		Tuple3 tmp = this.corners[0].subtract(ray.getOrigin());
+		Vec3 tmpVec = new Vec3(tmp.x, tmp.y, tmp.z);
+		float numerator = tmpVec.dot(this.normal);
+		
+		float d = numerator / denominator;
+		
+		Tuple3 t = ray.getOrigin().add(ray.getDirection().multiply(d));
+		
+		float x_min = Math.min(getTopLeft().x, getTopRight().x);
+		float x_max = Math.max(getTopLeft().x, getTopRight().x);
+		float y_min = Math.min(getTopLeft().y, getBottomLeft().y);
+		float y_max = Math.max(getTopLeft().y, getBottomLeft().y);
+		
+		if(t.x >= x_min && t.x <= x_max 
+				&& t.y >= y_min && t.y <= y_max) {
+			return new Point3(t.x, t.y, t.z);
+		}
+		
 		return null;
 	}
 	
@@ -80,5 +103,20 @@ public class Wall {
 	
 	public Point3 getBottomRight() {
 		return this.corners[3];
+	}
+	
+	public void translate(Vec3 vec) {
+		for(int i = 0; i < this.corners.length; i++) {
+			this.corners[i] = this.corners[i].translate(vec);
+		}
+	}
+	
+	public void rotate(Vec3 axis, float radiens) {
+		for(int i = 0; i < this.corners.length; i++) {
+			Tuple3 tmp = this.corners[i].rotate(axis, radiens);
+		}
+		
+		Tuple3 tmp = this.normal.rotate(axis, radiens);
+		this.normal = new Vec3(tmp.x, tmp.y, tmp.z);
 	}
 }

@@ -1,5 +1,7 @@
 package domain;
 
+import java.nio.ByteBuffer;
+
 public class PPC {
 	/**
 	 * C in the traditional PPC parlance
@@ -20,7 +22,7 @@ public class PPC {
 	 * f
 	 */
 	protected float focal_length;
-	protected float pixels[];
+	protected ByteBuffer pixels;
 	
 	public PPC(float horizontal_fov, int width, int height, Point3 origin) {
 		this.origin = origin;
@@ -70,17 +72,12 @@ public class PPC {
 		this.focal_length = focal_length;
 	}
 	
-	public float[] getPixels() {
-		// TODO: implement this
+	public ByteBuffer getPixels() {
 		return this.pixels;
 	}
 	
-	public float getPixel(int x, int y) {
-		return this.pixels[EnvironmentState.getInstance().width * y + x];
-	}
-	
-	public void setPixel(int x, int y, float color) {
-		this.pixels[EnvironmentState.getInstance().width * y + x] = color;
+	public void setPixels(ByteBuffer pixels) {
+		this.pixels = pixels;
 	}
 	
 	public Tuple3 toCameraCoords(Tuple3 in) {

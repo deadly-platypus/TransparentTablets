@@ -114,6 +114,9 @@ public class Wall {
 	public void rotate(Vec3 axis, float radiens) {
 		for(int i = 0; i < this.corners.length; i++) {
 			Tuple3 tmp = this.corners[i].rotate(axis, radiens);
+			this.corners[i].setX(tmp.getX());
+			this.corners[i].setY(tmp.getY());
+			this.corners[i].setZ(tmp.getZ());
 		}
 		
 		Tuple3 tmp = this.normal.rotate(axis, radiens);

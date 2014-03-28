@@ -31,6 +31,8 @@ public class TTKeyHandler implements KeyListener {
         case KeyEvent.VK_RIGHT:
         	EnvironmentState.getInstance().getCurrentCamera().setOrigin(EnvironmentState.getInstance().getCurrentCamera().getOrigin().translate(new Vec3(10.0f, 0.0f, 0.0f)));
         	break;
+        case KeyEvent.VK_P:
+        	System.out.println(EnvironmentState.getInstance().getCurrentCamera().getPixels().toString());
         }
 		this.canvas.display();
 	}

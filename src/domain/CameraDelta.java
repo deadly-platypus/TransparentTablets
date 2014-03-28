@@ -64,20 +64,7 @@ public class CameraDelta {
 			System.out.println(e.getMessage());
 		}
 		
-		// TODO: This is probably going to be ridic slow, so maybe find some other way
-//		Point3 p = new Point3();
-//		p.setZ(currentCamera.getView_corner().z);
-//		for(int x = 0; x < state.getWidth(); x++) {
-//			for(int y = 0; y < state.getHeight(); y++) {
-//				p.setX(x);
-//				p.setY(y);
-//				Tuple3 p_prime = previousCamera.project(p); 
-//				error += Math.abs(currentCamera.getPixel(x, y) - previousCamera.getPixel((int)p_prime.x, (int)p_prime.y));
-//				if(error > min_error) {
-//					break;
-//				}
-//			}
-//		}
+		
 		
 		return error;
 	}

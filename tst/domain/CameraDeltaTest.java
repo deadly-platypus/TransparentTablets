@@ -10,25 +10,6 @@ public class CameraDeltaTest {
 	public void testGetDifference() {
 		Point3 origin1 = new Point3();
 		EnvironmentState state = EnvironmentState.getInstance();
-		
-		PPC cam1 = state.getCurrentCamera();
-		cam1.pixels = makeRandomPixels();
-		
-		Vec3 trans = new Vec3(1.0f, 0.0f, 0.0f);
-		Point3 origin2 = origin1.translate(trans);
-		
-		PPC cam2 = new PPC(state.getHorizontal_fov(), state.getWidth(), state.getHeight(), origin2);
-		float pix2[] = new float[cam1.pixels.length];
-		for(int y = 0; y < state.getHeight(); y++) {
-			for(int x = 0; x < state.getWidth(); x++){
-				pix2[state.getWidth() * y + x] = cam1.getPixel((int)x + 1, (int)y);
-			}
-		}
-		cam2.pixels = pix2;
-		
-		CameraDelta cd = CameraDelta.getDifference(cam2, cam1);
-		
-		assertEquals(trans.x, cd.x_trans, 0.0f);
 	}
 	
 	private float[] makeRandomPixels() {

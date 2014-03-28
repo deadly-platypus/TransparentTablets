@@ -27,6 +27,8 @@ public class EnvironmentState {
 								new Point3(1000.0f, 1000.0f, 0.0f), 
 								new Point3(-1000.0f, -1000.0f, 0.0f), 
 								new Point3(1000.0f, -1000.0f, 0.0f));
+		
+		
 	}
 	
 	public void resize() {

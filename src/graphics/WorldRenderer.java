@@ -95,5 +95,13 @@ public class WorldRenderer extends TTRenderer implements GLEventListener {
         gl.glVertex3f(topLeft.getX(), topLeft.getY() - this.state.getHeight(), 0.1f);
         
         gl.glEnd();
+        
+        // Draw the camera
+        gl.glBegin(GL2GL3.GL_QUADS);
+        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() - 5, this.state.getCurrentCamera().getOrigin().getY() + 5, this.state.getCurrentCamera().getOrigin().getZ());
+        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() + 5, this.state.getCurrentCamera().getOrigin().getY() + 5, this.state.getCurrentCamera().getOrigin().getZ());
+        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() + 5, this.state.getCurrentCamera().getOrigin().getY() - 5, this.state.getCurrentCamera().getOrigin().getZ());
+        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() - 5, this.state.getCurrentCamera().getOrigin().getY() - 5, this.state.getCurrentCamera().getOrigin().getZ());
+        gl.glEnd();
 	}
 }

@@ -10,6 +10,7 @@ public class EnvironmentState {
 	protected boolean use_hardware;
 	protected int height, width;
 	protected GLCapabilities caps;
+	protected boolean infiniteWall = true;
 	
 	private static EnvironmentState instance;
 	
@@ -23,12 +24,12 @@ public class EnvironmentState {
 		this.previousCamera = null;
 		this.currentCamera = new PPC(this.horizontal_fov, this.width, this.height, new Point3(0.0f, 0.0f, 1.0f));
 		
-		this.wall = new Wall(new Point3(-1000.0f, 1000.0f, 0.0f), 
-								new Point3(1000.0f, 1000.0f, 0.0f), 
-								new Point3(-1000.0f, -1000.0f, 0.0f), 
-								new Point3(1000.0f, -1000.0f, 0.0f));
+		this.wall = new Wall(new Point3(-1.0f, 1.0f, 0.0f), 
+								new Point3(1.0f, 1.0f, 0.0f), 
+								new Point3(-1.0f, -1.0f, 0.0f), 
+								new Point3(1.0f, -1.0f, 0.0f));
 		
-		
+		this.wall.setInfinite(infiniteWall);
 	}
 	
 	public void resize() {

@@ -10,7 +10,6 @@ import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.util.texture.TextureCoords;
 
 import domain.EnvironmentState;
-import domain.Point3;
 
 public class WorldRenderer extends TTRenderer implements GLEventListener {
 
@@ -30,9 +29,7 @@ public class WorldRenderer extends TTRenderer implements GLEventListener {
         gl.glLoadIdentity();
         
         this.glu.gluPerspective(this.state.getHorizontal_fov(), this.state.getWidth() / this.state.getHeight(), EnvironmentState.MIN_Z, EnvironmentState.MAX_Z);
-        this.glu.gluLookAt(0.0f, 
-        		0.0f, 
-        		2500.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+        this.glu.gluLookAt(0.0f, 0.0f, 2.5f, 0.0f, 0.0f, -1.0f, 0.0f, 1.0f, 0.0f);
         
         // Change back to model view matrix.
         gl.glMatrixMode(GLMatrixFunc.GL_MODELVIEW);
@@ -88,20 +85,21 @@ public class WorldRenderer extends TTRenderer implements GLEventListener {
         
         // Draw the camera box
         //gl.glColor4f(0.0f, 1.0f, 0.0f, 0.0f);
-        Point3 topLeft = this.state.getCurrentCamera().getOrigin().translate(this.state.getCurrentCamera().getView_corner());
-        gl.glVertex3f(topLeft.getX(), topLeft.getY(), 0.1f);
-        gl.glVertex3f(topLeft.getX() + this.state.getWidth(), topLeft.getY(), 0.1f);
-        gl.glVertex3f(topLeft.getX() + this.state.getWidth(), topLeft.getY() - this.state.getHeight(), 0.1f);
-        gl.glVertex3f(topLeft.getX(), topLeft.getY() - this.state.getHeight(), 0.1f);
+        //Point3 topLeft = this.state.getCurrentCamera().getOrigin().translate(this.state.getCurrentCamera().getView_corner());
+//        gl.glVertex3f(topLeft.getX(), topLeft.getY(), 0.1f);
+//        gl.glVertex3f(topLeft.getX() + this.state.getWidth(), topLeft.getY(), 0.1f);
+//        gl.glVertex3f(topLeft.getX() + this.state.getWidth(), topLeft.getY() - this.state.getHeight(), 0.1f);
+//        gl.glVertex3f(topLeft.getX(), topLeft.getY() - this.state.getHeight(), 0.1f);
         
         gl.glEnd();
         
         // Draw the camera
+        float length = 0.01f;
         gl.glBegin(GL2GL3.GL_QUADS);
-        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() - 5, this.state.getCurrentCamera().getOrigin().getY() + 5, this.state.getCurrentCamera().getOrigin().getZ());
-        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() + 5, this.state.getCurrentCamera().getOrigin().getY() + 5, this.state.getCurrentCamera().getOrigin().getZ());
-        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() + 5, this.state.getCurrentCamera().getOrigin().getY() - 5, this.state.getCurrentCamera().getOrigin().getZ());
-        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() - 5, this.state.getCurrentCamera().getOrigin().getY() - 5, this.state.getCurrentCamera().getOrigin().getZ());
+        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() - length, this.state.getCurrentCamera().getOrigin().getY() + length, this.state.getCurrentCamera().getOrigin().getZ());
+        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() + length, this.state.getCurrentCamera().getOrigin().getY() + length, this.state.getCurrentCamera().getOrigin().getZ());
+        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() + length, this.state.getCurrentCamera().getOrigin().getY() - length, this.state.getCurrentCamera().getOrigin().getZ());
+        gl.glVertex3f(this.state.getCurrentCamera().getOrigin().getX() - length, this.state.getCurrentCamera().getOrigin().getY() - length, this.state.getCurrentCamera().getOrigin().getZ());
         gl.glEnd();
 	}
 }

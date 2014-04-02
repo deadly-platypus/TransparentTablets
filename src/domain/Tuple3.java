@@ -92,7 +92,7 @@ public class Tuple3 {
 	}
 	
 	public Tuple3 rotate(Vec3 axis, float radians) {
-		if(axis.distance2() != 1.0f) {
+		if(Math.abs(axis.distance2() - 1.0f) > Tuple3.epsilon) {
 			throw new NonUnitaryException(axis);
 		}
 		
@@ -113,5 +113,13 @@ public class Tuple3 {
 		
 		Matrix9 mat = new Matrix9(indices);
 		return mat.multiply(this);
+	}
+	
+	public Point3 toPoint3() {
+		return new Point3(x, y, z);
+	}
+	
+	public Vec3 toVec3() {
+		return new Vec3(x, y, z);
 	}
 }

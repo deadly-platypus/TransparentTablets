@@ -24,6 +24,8 @@ public class PPC {
 	protected float focal_length;
 	protected ByteBuffer pixels;
 	
+	private PPC() {}
+	
 	public PPC(float horizontal_fov, int width, int height, Point3 origin) {
 		this.origin = origin;
 		this.width = new Vec3(1.0f, 0.0f, 0.0f);
@@ -91,14 +93,8 @@ public class PPC {
 		Matrix9 inv = mat.inverted();
 		Tuple3 q = inv.multiply(pmc);
 		
-		if(q.z < 0.0f){
+		if(q.z <= 0.0f){
 			return null;
-		} else if(Math.abs(q.z) < Tuple3.epsilon) {
-			if(q.z < 0.0f) {
-				q.z = -Tuple3.epsilon;
-			} else {
-				q.z = Tuple3.epsilon;
-			}
 		}
 		
 		Tuple3 result = new Tuple3();
@@ -110,15 +106,53 @@ public class PPC {
 	}
 	
 	public Tuple3 toWorldCoords(Tuple3 in) {
-		
-		Tuple3 result = this.origin.add(this.width.multiply(in.x).add(this.height.multiply(in.y).add(this.view_corner)).multiply(1.0f / in.z));
+		Tuple3 x = this.width.multiply(in.x);
+		Tuple3 y = this.height.multiply(in.y);
+		Tuple3 result = x.add(y);
+		result = result.add(this.view_corner);
+		result = result.multiply(1.0f / in.z);
+		result = result.add(this.origin);
 		return result;
 	}
 	
 	public Ray3D toCameraCoords(Ray3D ray) {
-		Point3 origin = (Point3) this.toCameraCoords(ray.getOrigin());
-		Vec3 dir = (Vec3) this.toCameraCoords(ray.getDirection());
+		Point3 origin = this.toCameraCoords(ray.getOrigin()).toPoint3();
+		Vec3 dir = this.toCameraCoords(ray.getDirection()).toVec3();
 		
 		return new Ray3D(origin, dir);
+	}
+	
+	public Ray3D toWorldCoords(Ray3D csRay) {
+		Point3 origin = this.toWorldCoords(csRay.getOrigin()).toPoint3();
+		Vec3 dir = this.toWorldCoords(csRay.getDirection()).toVec3();
+		
+		return new Ray3D(origin, dir);
+	}
+	
+	public void rotate(Vec3 axis, float radians) {
+		if((axis.distance2() - 0.0f) >= Tuple3.epsilon) {
+			this.origin = this.origin.rotate(axis, radians).toPoint3();
+			this.width = this.width.rotate(axis, radians).toVec3();
+			this.height = this.height.rotate(axis, radians).toVec3();
+			this.view_corner = this.view_corner.rotate(axis, radians).toVec3();
+		}
+	}
+	
+	public void translate(Vec3 vec) {
+		this.origin = this.origin.translate(vec).toPoint3();
+	}
+	
+	public PPC copy(boolean copyPixels) {
+		PPC copy = new PPC();
+		copy.focal_length = this.focal_length;
+		copy.height = new Vec3(this.height);
+		copy.width = new Vec3(this.width);
+		copy.view_corner = new Vec3(this.view_corner);
+		copy.origin = new Point3(this.origin);
+		if(copyPixels) {
+			copy.pixels = this.pixels.duplicate();
+		}
+		
+		return copy;
 	}
 }

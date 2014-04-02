@@ -6,6 +6,7 @@ public class Wall {
 	protected Point3 corners[];
 	protected Vec3 normal;
 	protected Texture tex; // Used for when there is no hardware
+	protected boolean isInfinite = false;
 	
 	/**
 	 * The points are used for determining the normal, so order matters.
@@ -76,10 +77,10 @@ public class Wall {
 		
 		Tuple3 t = ray.getOrigin().add(ray.getDirection().multiply(d));
 		
-		float x_min = Math.min(getTopLeft().x, getTopRight().x);
-		float x_max = Math.max(getTopLeft().x, getTopRight().x);
-		float y_min = Math.min(getTopLeft().y, getBottomLeft().y);
-		float y_max = Math.max(getTopLeft().y, getBottomLeft().y);
+		float x_min = isInfinite ? -Float.MAX_VALUE : Math.min(getTopLeft().x, getTopRight().x);
+		float x_max = isInfinite ? Float.MAX_VALUE : Math.max(getTopLeft().x, getTopRight().x);
+		float y_min = isInfinite ? -Float.MAX_VALUE : Math.min(getTopLeft().y, getBottomLeft().y);
+		float y_max = isInfinite ? Float.MAX_VALUE : Math.max(getTopLeft().y, getBottomLeft().y);
 		
 		if(t.x >= x_min && t.x <= x_max 
 				&& t.y >= y_min && t.y <= y_max) {
@@ -105,6 +106,14 @@ public class Wall {
 		return this.corners[3];
 	}
 	
+	public boolean isInfinite() {
+		return isInfinite;
+	}
+
+	public void setInfinite(boolean isInfinite) {
+		this.isInfinite = isInfinite;
+	}
+
 	public void translate(Vec3 vec) {
 		for(int i = 0; i < this.corners.length; i++) {
 			this.corners[i] = this.corners[i].translate(vec);

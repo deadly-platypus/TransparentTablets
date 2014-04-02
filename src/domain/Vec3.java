@@ -25,9 +25,11 @@ public class Vec3 extends Tuple3{
 	public void normalize(){
 		float distance = this.distance();
 				
-		this.x /= distance;
-		this.y /= distance;
-		this.z /= distance;
+		if(distance != 0.0f) {
+			this.x /= distance;
+			this.y /= distance;
+			this.z /= distance;
+		}
 	}
 	
 	public Vec3 multiply(float scale) {

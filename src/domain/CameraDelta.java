@@ -9,6 +9,16 @@ public class CameraDelta {
 	float x_trans, y_trans, z_trans;
 	float x_rot, y_rot, z_rot;
 	
+	public CameraDelta() {
+		this.x_trans = 0.0f;
+		this.y_trans = 0.0f;
+		this.z_trans = 0.0f;
+		
+		this.x_rot = 0.0f;
+		this.y_rot = 0.0f;
+		this.z_rot = 0.0f;
+	}
+	
 	public CameraDelta(float x_trans, float y_trans, float z_trans, float x_rot, float y_rot, float z_rot) { 
 		this.x_trans = x_trans;
 		this.y_trans = y_trans;

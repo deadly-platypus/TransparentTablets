@@ -28,7 +28,7 @@ public class TTRenderer implements GLEventListener {
 		this.glu = new GLU();
 		
 		GL2 gl = drawable.getGL().getGL2();
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+		gl.glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
 		gl.glShadeModel(GLLightingFunc.GL_SMOOTH);
 		
 		if(!this.state.isUse_hardware()) {

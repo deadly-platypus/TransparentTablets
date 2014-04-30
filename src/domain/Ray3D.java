@@ -6,7 +6,7 @@ public class Ray3D {
 	
 	public Ray3D(Point3 origin, Point3 p){
 		this.origin = origin;
-		this.direction = new Vec3(origin, p);
+		this.direction = new Vec3(p, origin);
 		this.direction.normalize();
 	}
 	

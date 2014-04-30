@@ -1,14 +1,17 @@
-import graphics.ScreenRenderer;
 import graphics.TTKeyHandler;
 import graphics.WorldRenderer;
 
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.EventListener;
 
-import javax.swing.SwingUtilities;
 import javax.media.opengl.awt.GLCanvas;
+import javax.swing.SwingUtilities;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
@@ -28,12 +31,20 @@ public class TransparentTablets {
 	        	 Frame worldFrame = new Frame(title + " - World");
 		
 	        	 GLCanvas worldCanvas = new GLCanvas();
+	        	 EventListener listener = new TTKeyHandler(worldCanvas);
+	        	 worldCanvas.addKeyListener((KeyListener) listener);
+	        	 worldCanvas.addMouseMotionListener((MouseMotionListener) listener);
+	        	 worldCanvas.addMouseListener((MouseListener) listener);
 	        	 final FPSAnimator animator = new FPSAnimator(worldCanvas, 60);
 	        	 worldCanvas.addGLEventListener(new WorldRenderer());
-	        	 worldCanvas.setPreferredSize(new Dimension(EnvironmentState.getInstance().getWidth() * 3, EnvironmentState.getInstance().getHeight() * 3));
+	        	 if(!EnvironmentState.getInstance().isUseCapturedImage()) {
+	        		 worldCanvas.setPreferredSize(new Dimension(EnvironmentState.getInstance().getWindowWidth() * 3, EnvironmentState.getInstance().getWindowHeight() * 3));
+	        	 } else {
+	        		 // This is the size of the picture frames
+	        		 worldCanvas.setPreferredSize(new Dimension(1920, 1080));
+	        	 }
 	        	 
 	        	 worldFrame.add(worldCanvas);
-	        	 worldFrame.addKeyListener(new TTKeyHandler(worldCanvas));
 	        	 worldFrame.addWindowListener(new WindowAdapter() {
 	                 @Override 
 	                 public void windowClosing(WindowEvent e) {
@@ -51,33 +62,6 @@ public class TransparentTablets {
 	        	 
 	        	 worldFrame.pack();
 	        	 worldFrame.setVisible(true);
-	        	 
-	        	 Frame screenFrame = new Frame(title + " - Screen");
-	        	 screenFrame.setLocation(worldFrame.getLocation().x + worldFrame.getSize().width + 10, worldFrame.getLocation().y);
-	        	 screenFrame.addWindowListener(new WindowAdapter() {
-	                 @Override 
-	                 public void windowClosing(WindowEvent e) {
-	                    // Use a dedicate thread to run the stop() to ensure that the
-	                    // animator stops before program exits.
-	                    new Thread() {
-	                       @Override 
-	                       public void run() {
-	                          if (animator.isStarted()) animator.stop();
-	                          System.exit(0);
-	                       }
-	                    }.start();
-	                 }
-	              });
-	        	 
-	        	 GLCanvas screenCanvas = new GLCanvas();
-	        	 screenFrame.addKeyListener(new TTKeyHandler(screenCanvas));
-	        	 
-	        	 screenCanvas.addGLEventListener(new ScreenRenderer());
-	        	 screenCanvas.setPreferredSize(new Dimension(EnvironmentState.getInstance().getWidth(), EnvironmentState.getInstance().getHeight()));
-	        	 screenFrame.add(screenCanvas);
-	        	 animator.add(screenCanvas);
-	        	 screenFrame.pack();
-	        	 screenFrame.setVisible(true);
 	        	 
 	        	 animator.start();
 	         }

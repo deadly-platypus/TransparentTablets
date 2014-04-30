@@ -1,5 +1,11 @@
 package domain;
 
+import graphics.WorldRenderer;
+
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
 import java.nio.ByteBuffer;
 
 public class PPC {
@@ -11,27 +17,33 @@ public class PPC {
 	/**
 	 * c in the traditional PPC parlance
 	 */
-	protected Vec3 view_corner;
+	protected Vec3 view_corner, look_at;
 	
 	/**
 	 * a and b respectively
 	 */
 	protected Vec3 width, height;
 	
+	protected int camId;
+	
+	private static int nextId = 0;
 	/**
 	 * f
 	 */
 	protected float focal_length;
-	protected ByteBuffer pixels;
+	protected BufferedImage pixels;
+	protected BufferedImage simulatedPixels;
 	
 	private PPC() {}
 	
 	public PPC(float horizontal_fov, int width, int height, Point3 origin) {
+		this.camId = PPC.nextId++;
 		this.origin = origin;
 		this.width = new Vec3(1.0f, 0.0f, 0.0f);
 		this.height = new Vec3(0.0f, -1.0f, 0.0f);
 		this.focal_length = (float) (width / (2.0f * Math.tan(horizontal_fov / 2.0f * (Math.PI / 180.0f))));
 		this.view_corner = new Vec3(-(float)width / 2.0f, (float)height / 2.0f, -this.focal_length);
+		this.look_at = new Vec3(0.0f, 0.0f, -1.0f);
 	}
 
 	public Point3 getOrigin() {
@@ -74,14 +86,22 @@ public class PPC {
 		this.focal_length = focal_length;
 	}
 	
-	public ByteBuffer getPixels() {
+	public BufferedImage getPixels() {
 		return this.pixels;
 	}
 	
-	public void setPixels(ByteBuffer pixels) {
+	public void setPixels(BufferedImage pixels) {
 		this.pixels = pixels;
 	}
 	
+	public Vec3 getLook_at() {
+		return look_at;
+	}
+
+	public void setLook_at(Vec3 look_at) {
+		this.look_at = look_at;
+	}
+
 	public Tuple3 toCameraCoords(Tuple3 in) {
 		Matrix9 mat = new Matrix9();
 		
@@ -131,15 +151,38 @@ public class PPC {
 	
 	public void rotate(Vec3 axis, float radians) {
 		if((axis.distance2() - 0.0f) >= Tuple3.epsilon) {
-			this.origin = this.origin.rotate(axis, radians).toPoint3();
-			this.width = this.width.rotate(axis, radians).toVec3();
-			this.height = this.height.rotate(axis, radians).toVec3();
-			this.view_corner = this.view_corner.rotate(axis, radians).toVec3();
+			Vec3 copy = new Vec3(axis);
+			copy.normalize();
+			this.view_corner = this.view_corner.rotate(copy, radians).toVec3();
+			this.look_at = this.look_at.rotate(copy, radians).toVec3();
+			this.height = this.height.rotate(copy, radians).toVec3();
+			this.width = this.width.rotate(copy, radians).toVec3();
 		}
 	}
 	
 	public void translate(Vec3 vec) {
 		this.origin = this.origin.translate(vec).toPoint3();
+	}
+	
+	public ByteBuffer getByteBuffer() {
+		if(this.pixels != null) {
+			BufferedImage copy = new BufferedImage(this.pixels.getWidth(), this.pixels.getHeight(), this.pixels.getType());
+			Graphics2D g = copy.createGraphics();
+			AffineTransform gt = new AffineTransform();
+			gt.translate(0, this.pixels.getHeight());
+		    gt.scale(1, -1d);
+		    g.transform(gt);	    
+		    g.drawImage(this.pixels, null, 0, 0);
+			
+			byte src[] = ((DataBufferByte)copy.getRaster().getDataBuffer()).getData();
+			ByteBuffer result = ByteBuffer.allocate(src.length);
+			result.put(src, 0, src.length);
+			result.rewind();
+			g.dispose();
+			return result;
+		}
+		
+		return null;
 	}
 	
 	public PPC copy(boolean copyPixels) {
@@ -149,10 +192,44 @@ public class PPC {
 		copy.width = new Vec3(this.width);
 		copy.view_corner = new Vec3(this.view_corner);
 		copy.origin = new Point3(this.origin);
-		if(copyPixels) {
-			copy.pixels = this.pixels.duplicate();
-		}
+		copy.look_at = new Vec3(this.look_at);
+//		if(copyPixels) {
+//			copy.pixels = this.pixels.duplicate();
+//		}
 		
 		return copy;
+	}
+
+	public BufferedImage getSimulatedPixels() {
+		return simulatedPixels;
+	}
+
+	public void setSimulatedPixels(BufferedImage simulatedPixels) {
+		this.simulatedPixels = simulatedPixels;
+	}
+
+	public int getCamId() {
+		return camId;
+	}
+
+	public void setCamId(int camId) {
+		this.camId = camId;
+	}
+
+	public static PPC makeAndTransformCamera(PPC original, float x_trans,
+			float y_trans, float z_trans, float x_rot, float y_rot, float z_rot) {
+		Vec3 trans = new Vec3(x_trans, y_trans, z_trans);
+		Vec3 rot = new Vec3(x_rot, y_rot, z_rot);
+		rot.normalize();
+
+		PPC newCam = original.copy(false);
+		newCam.translate(trans);
+		newCam.rotate(rot, WorldRenderer.ROTATION_AMT);
+
+		return newCam;
+	}
+	
+	public static int nextId() {
+		return PPC.nextId++;
 	}
 }

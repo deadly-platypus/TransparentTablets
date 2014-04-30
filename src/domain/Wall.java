@@ -6,7 +6,7 @@ public class Wall {
 	protected Point3 corners[];
 	protected Vec3 normal;
 	protected Texture tex; // Used for when there is no hardware
-	protected boolean isInfinite = false;
+	protected boolean isInfinite = true;
 	
 	/**
 	 * The points are used for determining the normal, so order matters.
@@ -63,31 +63,23 @@ public class Wall {
 	}
 
 	public Point3 intersect(Ray3D ray) {
-		float denominator = ray.getDirection().dot(this.normal);
+		float test = ray.getDirection().dot(this.normal);
 		// This assumes that the ray is in front of the wall
-		if(denominator >= 0.0f){
+		if(test >= 0.0f){
 			return null;
 		}
 		
-		Tuple3 tmp = this.corners[0].subtract(ray.getOrigin());
-		Vec3 tmpVec = new Vec3(tmp.x, tmp.y, tmp.z);
-		float numerator = tmpVec.dot(this.normal);
+		Point3 x0 = this.corners[0];
 		
-		float d = numerator / denominator;
+		float d = -(this.normal.x * x0.x + this.normal.y * x0.y + this.normal.z * x0.z);
 		
-		Tuple3 t = ray.getOrigin().add(ray.getDirection().multiply(d));
+		float numerator = (d - this.normal.x * ray.getOrigin().x - this.normal.y * ray.getOrigin().y - this.normal.z * ray.getOrigin().z);
 		
-		float x_min = isInfinite ? -Float.MAX_VALUE : Math.min(getTopLeft().x, getTopRight().x);
-		float x_max = isInfinite ? Float.MAX_VALUE : Math.max(getTopLeft().x, getTopRight().x);
-		float y_min = isInfinite ? -Float.MAX_VALUE : Math.min(getTopLeft().y, getBottomLeft().y);
-		float y_max = isInfinite ? Float.MAX_VALUE : Math.max(getTopLeft().y, getBottomLeft().y);
+		float denominator = this.normal.x * ray.getDirection().x + this.normal.y * ray.getDirection().y + this.normal.z * ray.getDirection().z;
 		
-		if(t.x >= x_min && t.x <= x_max 
-				&& t.y >= y_min && t.y <= y_max) {
-			return new Point3(t.x, t.y, t.z);
-		}
+		float t = numerator / denominator;
 		
-		return null;
+		return new Point3(ray.origin.x + t * ray.direction.x, ray.origin.y + t * ray.direction.y, ray.origin.z + t * ray.direction.z);
 	}
 	
 	public Point3 getTopLeft() {
